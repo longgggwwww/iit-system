@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  username    String       @unique
+  password    String
+  profile     Profile?
+  type        Int          @default(0) // Internal, Dev, Business
+  provider    String? // local, google, facebook, github
+  isActive    Boolean      @default(false)
+  role        Role         @relation(fields: [roleId], references: [id])
+  roleId      Int
+  roles       Role[]       @relation("created")
+  groups      Group[]
+  permissions Permission[]
+  successorId Int?         @unique
+  successor   User?        @relation("User", fields: [successorId], references: [id])
+  predecessor User?        @relation("User")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Profile {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int       @unique
+  email      String?   @unique
+  phone      String?   @unique
+  fullName   String?
+  birthday   DateTime?
+  gender     Boolean?
+  address    String?
+  photo      String?
+  positionId Int?
+  wardId     Int?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  code        String       @unique
+  successorId Int?         @unique
+  successor   Role?        @relation("Role", fields: [successorId], references: [id])
+  predecessor Role?        @relation("Role")
+  permissions Permission[]
+  users       User[]
+  user        User?        @relation(name: "created", fields: [userId], references: [id])
+  userId      Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Group {
+  id          Int          @id @default(autoincrement())
+  name        String
+  permissions Permission[]
+  user        User?        @relation(fields: [userId], references: [id])
+  userId      Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Permission {
+  id        Int      @id @default(autoincrement())
+  name      String
+  code      String   @unique
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   Int
+  roles     Role[]
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
