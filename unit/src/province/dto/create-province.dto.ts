@@ -1,13 +1,13 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateProvinceDto {
     @IsString()
     @IsNotEmpty()
-    name: string;
+    name: string
 
     @IsString()
     @IsNotEmpty()
-    code: string;
+    code: string
 
-    userId?: number;
+    userId?: number
 }

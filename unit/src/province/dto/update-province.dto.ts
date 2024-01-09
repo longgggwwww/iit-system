@@ -1,6 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsArray, IsNumber, IsOptional } from 'class-validator';
-import { CreateProvinceDto } from './create-province.dto';
+import { PartialType } from '@nestjs/mapped-types'
+import { IsArray, IsNumber, IsOptional } from 'class-validator'
+import { CreateProvinceDto } from './create-province.dto'
 
 export class UpdateProvinceDto extends PartialType(CreateProvinceDto) {
     @IsNumber(
@@ -12,5 +12,5 @@ export class UpdateProvinceDto extends PartialType(CreateProvinceDto) {
     )
     @IsArray()
     @IsOptional()
-    districtIds: number[];
+    districtIds: number[]
 }

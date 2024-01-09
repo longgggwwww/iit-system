@@ -97,17 +97,29 @@ services:
     volumes:
       - unit-postgres:/var/lib/postgresql/data
 
-  log-mongo:
-    image: mongo
-    container_name: log-mongo
+  log-postgres:
+    image: postgres:14
+    container_name: log-postgres
     restart: always
     ports:
-      - 27018:27017
+      - 5436:5432
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${LOG_MONGO_USER:-root}
-      - MONGO_INITDB_ROOT_PASSWORD=${LOG_MONGO_PASSWORD:-123456}
+      - POSTGRES_USER=${LOG_POSTGRES_USER:-root}
+      - POSTGRES_PASSWORD=${LOG_POSTGRES_PASSWORD:-123456}
     volumes:
-      - log-mongo:/data/db
+      - log-postgres:/var/lib/postgresql/data
+
+  cfg-postgres:
+    image: postgres:14
+    container_name: cfg-postgres
+    restart: always
+    ports:
+      - 5437:5432
+    environment:
+      - POSTGRES_USER=${CFG_POSTGRES_USER:-root}
+      - POSTGRES_PASSWORD=${CFG_POSTGRES_PASSWORD:-123456}
+    volumes:
+      - cfg-postgres:/var/lib/postgresql/data
 
 volumes:
   rabbitmq_data:
@@ -120,5 +132,7 @@ volumes:
     name: company-postgres-db
   unit-postgres:
     name: unit-postgres-db
-  log-mongo:
-    name: log-mongo-db
+  log-postgres:
+    name: log-postgres-db
+  cfg-postgres:
+    name: cfg-postgres-db

@@ -1,15 +1,15 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator'
 
 export class FindGroupDto {
     @IsNumber()
     @IsOptional()
-    skip?: number;
+    skip?: number
 
     @IsNumber()
     @IsOptional()
-    take?: number;
+    take?: number
 
     @IsNumber()
     @IsOptional()
-    cursor?: number;
+    cursor?: number
 }

@@ -1,6 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsArray, IsNumber, IsOptional } from 'class-validator';
-import { CreateGroupDto } from './create-group.dto';
+import { PartialType } from '@nestjs/mapped-types'
+import { IsArray, IsNumber, IsOptional } from 'class-validator'
+import { CreateGroupDto } from './create-group.dto'
 
 export class UpdateGroupDto extends PartialType(CreateGroupDto) {
     @IsNumber(
@@ -12,5 +12,5 @@ export class UpdateGroupDto extends PartialType(CreateGroupDto) {
     )
     @IsArray()
     @IsOptional()
-    permissionIds: number[];
+    permissionIds: number[]
 }

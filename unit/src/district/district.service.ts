@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateDistrictDto } from './dto/create-district.dto';
-import { DeleteDistrictDto } from './dto/delete-district.dto';
-import { FindDistrictDto } from './dto/find-district.dto';
-import { UpdateDistrictDto } from './dto/update-district.dto';
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateDistrictDto } from './dto/create-district.dto'
+import { DeleteDistrictDto } from './dto/delete-district.dto'
+import { FindDistrictDto } from './dto/find-district.dto'
+import { UpdateDistrictDto } from './dto/update-district.dto'
 
 @Injectable()
 export class DistrictService {
     constructor(private prisma: PrismaService) {}
 
     async create(dto: CreateDistrictDto) {
-        const { name, code, provinceId, userId } = dto;
+        const { name, code, provinceId, userId } = dto
         return this.prisma.district.create({
             data: {
                 name,
@@ -29,11 +29,11 @@ export class DistrictService {
                     },
                 },
             },
-        });
+        })
     }
 
     async findAll(dto: FindDistrictDto) {
-        const { skip, take, cursor } = dto;
+        const { skip, take, cursor } = dto
         return this.prisma.district.findMany({
             skip,
             take,
@@ -50,14 +50,12 @@ export class DistrictService {
                     },
                 },
             },
-        });
+        })
     }
 
     async findOne(id: number) {
         return this.prisma.district.findUniqueOrThrow({
-            where: {
-                id,
-            },
+            where: { id },
             include: {
                 _count: true,
                 province: {
@@ -67,15 +65,13 @@ export class DistrictService {
                 },
                 wards: true,
             },
-        });
+        })
     }
 
     async update(id: number, dto: UpdateDistrictDto) {
-        const { name, code, provinceId, wardIds } = dto;
+        const { name, code, provinceId, wardIds } = dto
         return this.prisma.district.update({
-            where: {
-                id,
-            },
+            where: { id },
             data: {
                 name,
                 code,
@@ -102,14 +98,12 @@ export class DistrictService {
                 },
                 wards: true,
             },
-        });
+        })
     }
 
     async remove(id: number) {
         return this.prisma.district.delete({
-            where: {
-                id,
-            },
+            where: { id },
             include: {
                 _count: true,
                 province: {
@@ -119,16 +113,14 @@ export class DistrictService {
                 },
                 wards: true,
             },
-        });
+        })
     }
 
     async removeBatch(dto: DeleteDistrictDto) {
         return this.prisma.district.deleteMany({
             where: {
-                id: {
-                    in: dto.ids,
-                },
+                id: { in: dto.ids },
             },
-        });
+        })
     }
 }
