@@ -3,28 +3,39 @@ import {
     Controller,
     Delete,
     Get,
+    Inject,
+    Injectable,
     Param,
     ParseIntPipe,
     Patch,
     Post,
     Query,
-    Request,
+    Scope,
 } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
 import { DepartmentService } from './department.service'
 import { CreateDepartmentDto } from './dto/create-department.dto'
 import { DeleteDepartmentDto } from './dto/delete-department.dto'
 import { FindDepartmentDto } from './dto/find-department.dto'
 import { UpdateDepartmentDto } from './dto/update-department.dto'
 
+@Injectable({ scope: Scope.REQUEST })
 @Controller('departments')
 export class DepartmentController {
-    constructor(private department: DepartmentService) {}
+    constructor(
+        private department: DepartmentService,
+        @Inject(REQUEST) private req: any,
+    ) {
+        if (req.headers) {
+            req.headers.entity = 'department'
+        }
+    }
 
     @Post()
-    create(@Body() dto: CreateDepartmentDto, @Request() req) {
+    create(@Body() dto: CreateDepartmentDto) {
         return this.department.create({
             ...dto,
-            userId: req.user?.id,
+            userId: this.req.user?.id,
         })
     }
 

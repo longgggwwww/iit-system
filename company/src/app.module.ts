@@ -1,10 +1,12 @@
 import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { APP_INTERCEPTOR } from '@nestjs/core'
 import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { CompanyModule } from './company/company.module'
 import { DepartmentModule } from './department/department.module'
+import { LoggingInterceptor } from './logging/logging.interceptor'
 import { PositionModule } from './position/position.module'
 
 @Module({
@@ -29,6 +31,22 @@ import { PositionModule } from './position/position.module'
                     },
                     inject: [ConfigService],
                 },
+                {
+                    name: 'LOG_SERVICE',
+                    useFactory: (config: ConfigService) => {
+                        return {
+                            transport: Transport.RMQ,
+                            options: {
+                                urls: [`${config.get('LOG_RB_URL')}`],
+                                queue: `${config.get('LOG_QUEUE')}`,
+                                queueOptions: {
+                                    durable: true,
+                                },
+                            },
+                        }
+                    },
+                    inject: [ConfigService],
+                },
             ],
         }),
         CompanyModule,
@@ -36,12 +54,21 @@ import { PositionModule } from './position/position.module'
         PositionModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: LoggingInterceptor,
+        },
+    ],
 })
 export class AppModule implements OnApplicationBootstrap {
-    constructor(@Inject('UNIT_SERVICE') private unit: ClientProxy) {}
+    constructor(
+        @Inject('UNIT_SERVICE') private unit: ClientProxy,
+        @Inject('LOG_SERVICE') private log: ClientProxy,
+    ) {}
 
     async onApplicationBootstrap() {
-        await this.unit.connect()
+        await Promise.allSettled([this.unit.connect(), this.log.connect()])
     }
 }

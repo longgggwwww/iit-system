@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class AppService {
-    ping(): string {
+    ping() {
         return 'Gretting from COMPANY SERVICE'
     }
 }

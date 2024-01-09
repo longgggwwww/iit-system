@@ -26,7 +26,9 @@ export class ProvinceController {
         private province: ProvinceService,
         @Inject(REQUEST) private req: any,
     ) {
-        req.headers.entity = 'province'
+        if (req.headers) {
+            req.headers.entity = 'province'
+        }
     }
 
     @Post()

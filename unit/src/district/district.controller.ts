@@ -26,7 +26,9 @@ export class DistrictController {
         private district: DistrictService,
         @Inject(REQUEST) private req: any,
     ) {
-        req.headers.entity = 'district'
+        if (req.headers) {
+            req.headers.entity = 'district'
+        }
     }
 
     @Post()

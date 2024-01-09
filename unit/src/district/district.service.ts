@@ -104,15 +104,6 @@ export class DistrictService {
     async remove(id: number) {
         return this.prisma.district.delete({
             where: { id },
-            include: {
-                _count: true,
-                province: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                wards: true,
-            },
         })
     }
 

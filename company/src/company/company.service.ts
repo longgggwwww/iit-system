@@ -26,10 +26,9 @@ export class CompanyService {
                 userId,
             },
         })
-
-        if (wardId) {
+        if (company.wardId) {
             const ward = await firstValueFrom(
-                this.unit.send('ward_findOne', wardId),
+                this.unit.send('ward_findOne', company.wardId),
             )
             return { ...company, ward }
         }
@@ -64,7 +63,6 @@ export class CompanyService {
                 },
             },
         })
-
         if (company.wardId) {
             const ward = await firstValueFrom(
                 this.unit.send('ward_findOne', company.wardId),
@@ -100,29 +98,6 @@ export class CompanyService {
                 },
             },
         })
-
-        if (wardId) {
-            const ward = await firstValueFrom(
-                this.unit.send('ward_findOne', wardId),
-            )
-            return { ...company, ward }
-        }
-        return company
-    }
-
-    async remove(id: number) {
-        const company = await this.prisma.company.delete({
-            where: { id },
-            include: {
-                _count: true,
-                departments: {
-                    include: {
-                        _count: true,
-                    },
-                },
-            },
-        })
-
         if (company.wardId) {
             const ward = await firstValueFrom(
                 this.unit.send('ward_findOne', company.wardId),
@@ -130,6 +105,12 @@ export class CompanyService {
             return { ...company, ward }
         }
         return company
+    }
+
+    async remove(id: number) {
+        return this.prisma.company.delete({
+            where: { id },
+        })
     }
 
     async removeBatch(dto: DeleteCompanyDto) {

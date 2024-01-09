@@ -78,14 +78,6 @@ export class ProvinceService {
     async remove(id: number) {
         return this.prisma.province.delete({
             where: { id },
-            include: {
-                _count: true,
-                districts: {
-                    include: {
-                        _count: true,
-                    },
-                },
-            },
         })
     }
 

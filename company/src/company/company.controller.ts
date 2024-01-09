@@ -3,13 +3,16 @@ import {
     Controller,
     Delete,
     Get,
+    Inject,
+    Injectable,
     Param,
     ParseIntPipe,
     Patch,
     Post,
     Query,
-    Request,
+    Scope,
 } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { CompanyService } from './company.service'
 import { CreateCompanyDto } from './dto/create-company.dto'
@@ -17,15 +20,23 @@ import { DeleteCompanyDto } from './dto/delete-company.dto'
 import { FindCompanyDto } from './dto/find-company.dto'
 import { UpdateCompanyDto } from './dto/update-company.dto'
 
+@Injectable({ scope: Scope.REQUEST })
 @Controller('companies')
 export class CompanyController {
-    constructor(private company: CompanyService) {}
+    constructor(
+        private company: CompanyService,
+        @Inject(REQUEST) private req: any,
+    ) {
+        if (req.headers) {
+            req.headers.entity = 'company'
+        }
+    }
 
     @Post()
-    create(@Body() dto: CreateCompanyDto, @Request() req) {
+    create(@Body() dto: CreateCompanyDto) {
         return this.company.create({
             ...dto,
-            userId: req.user?.id,
+            userId: this.req.user?.id,
         })
     }
 
@@ -59,18 +70,7 @@ export class CompanyController {
 
     // ----------- Microservice ---------------
 
-    @MessagePattern({
-        prefix: 'company',
-        cmd: 'findAll',
-    })
-    _findAll(@Payload() dto: FindCompanyDto) {
-        return this.company.findAll(dto)
-    }
-
-    @MessagePattern({
-        prefix: 'company',
-        cmd: 'findOne',
-    })
+    @MessagePattern('company_findOne')
     _findOne(@Payload() id: number) {
         return this.company.findOne(id)
     }

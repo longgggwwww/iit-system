@@ -24,7 +24,6 @@ export class AppService {
                 update: {},
             })
         }
-
         if (conf.roleId) {
             const role = await firstValueFrom(
                 this.user.send('role_findOne', conf.roleId),

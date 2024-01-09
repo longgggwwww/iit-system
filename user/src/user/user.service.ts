@@ -10,7 +10,7 @@ export class UserService {
     constructor(private prisma: PrismaService) {}
 
     async create(dto: CreateUserDto) {
-        const { username, password } = dto
+        const { username, password, userId } = dto
         return this.prisma.user.create({
             data: {
                 username,

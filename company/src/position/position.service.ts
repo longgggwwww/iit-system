@@ -55,9 +55,7 @@ export class PositionService {
 
     async findOne(id: number) {
         return this.prisma.position.findUniqueOrThrow({
-            where: {
-                id,
-            },
+            where: { id },
             include: {
                 department: {
                     include: {
@@ -71,9 +69,7 @@ export class PositionService {
     async update(id: number, dto: UpdatePositionDto) {
         const { name, code, departmentId } = dto
         return this.prisma.position.update({
-            where: {
-                id,
-            },
+            where: { id },
             data: {
                 name,
                 code,
@@ -97,25 +93,14 @@ export class PositionService {
 
     async remove(id: number) {
         return this.prisma.position.delete({
-            where: {
-                id,
-            },
-            include: {
-                department: {
-                    include: {
-                        company: true,
-                    },
-                },
-            },
+            where: { id },
         })
     }
 
     async removeBatch(dto: DeletePositionDto) {
         return this.prisma.position.deleteMany({
             where: {
-                id: {
-                    in: dto.ids,
-                },
+                id: { in: dto.ids },
             },
         })
     }

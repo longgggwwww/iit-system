@@ -3,25 +3,40 @@ import {
     Controller,
     Delete,
     Get,
+    Inject,
+    Injectable,
     Param,
     ParseIntPipe,
     Patch,
     Post,
     Query,
+    Scope,
 } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
 import { CreateUserDto } from './dto/create-user.dto'
 import { DeleteUserDto } from './dto/delete-user.dto'
 import { FindUserDto } from './dto/find-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserService } from './user.service'
 
+@Injectable({ scope: Scope.REQUEST })
 @Controller('users')
 export class UserController {
-    constructor(private user: UserService) {}
+    constructor(
+        private user: UserService,
+        @Inject(REQUEST) private req: any,
+    ) {
+        if (req.headers) {
+            req.headers.entity = 'user'
+        }
+    }
 
     @Post()
     create(@Body() dto: CreateUserDto) {
-        return this.user.create(dto)
+        return this.user.create({
+            ...dto,
+            userId: this.req.user?.id,
+        })
     }
 
     @Get()

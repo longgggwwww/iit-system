@@ -3,28 +3,40 @@ import {
     Controller,
     Delete,
     Get,
+    Inject,
+    Injectable,
     Param,
     ParseIntPipe,
     Patch,
     Post,
     Query,
-    Request,
+    Scope,
 } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
+import { MessagePattern, Payload } from '@nestjs/microservices'
 import { CreatePositionDto } from './dto/create-position.dto'
 import { DeletePositionDto } from './dto/delete-position.dto'
 import { FindPositionDto } from './dto/find-position.dto'
 import { UpdatePositionDto } from './dto/update-position.dto'
 import { PositionService } from './position.service'
 
+@Injectable({ scope: Scope.REQUEST })
 @Controller('positions')
 export class PositionController {
-    constructor(private position: PositionService) {}
+    constructor(
+        private position: PositionService,
+        @Inject(REQUEST) private req: any,
+    ) {
+        if (req.headers) {
+            req.headers.entity = 'position'
+        }
+    }
 
     @Post()
-    create(@Body() dto: CreatePositionDto, @Request() req) {
+    create(@Body() dto: CreatePositionDto) {
         return this.position.create({
             ...dto,
-            userId: req.user?.id,
+            userId: this.req.user?.id,
         })
     }
 
@@ -54,5 +66,16 @@ export class PositionController {
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.position.remove(id)
+    }
+
+    // ----------- Microservice ---------------
+
+    @MessagePattern('position_findOne')
+    async _findOne(@Payload() id: number) {
+        try {
+            return await this.position.findOne(id)
+        } catch {
+            return null
+        }
     }
 }
