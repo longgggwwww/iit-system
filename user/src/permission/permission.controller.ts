@@ -26,7 +26,9 @@ export class PermissionController {
         private permission: PermissionService,
         @Inject(REQUEST) private req: any,
     ) {
-        req.headers.entity = 'permission'
+        if (req.headers) {
+            req.headers.entity = 'permission'
+        }
     }
 
     @Post()

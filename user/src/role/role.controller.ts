@@ -27,7 +27,9 @@ export class RoleController {
         private role: RoleService,
         @Inject(REQUEST) private req: any,
     ) {
-        req.headers.entity = 'role'
+        if (req.headers) {
+            req.headers.entity = 'role'
+        }
     }
 
     @Post()

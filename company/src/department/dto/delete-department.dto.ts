@@ -1,4 +1,4 @@
-import { IsArray, IsNumber } from 'class-validator';
+import { IsArray, IsNumber } from 'class-validator'
 
 export class DeleteDepartmentDto {
     @IsNumber(
@@ -9,5 +9,5 @@ export class DeleteDepartmentDto {
         { each: true },
     )
     @IsArray()
-    ids: number[];
+    ids: number[]
 }

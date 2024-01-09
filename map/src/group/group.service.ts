@@ -1,26 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateGroupDto } from './dto/create-group.dto';
-import { DeleteGroupDto } from './dto/delete-group.dto';
-import { FindGroupDto } from './dto/find-group.dto';
-import { UpdateGroupDto } from './dto/update-group.dto';
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateGroupDto } from './dto/create-group.dto'
+import { DeleteGroupDto } from './dto/delete-group.dto'
+import { FindGroupDto } from './dto/find-group.dto'
+import { UpdateGroupDto } from './dto/update-group.dto'
 
 @Injectable()
 export class GroupService {
     constructor(private prisma: PrismaService) {}
 
     async create(dto: CreateGroupDto) {
-        const { name, userId } = dto;
+        const { name, userId } = dto
         return this.prisma.group.create({
             data: {
                 name,
                 userId,
             },
-        });
+        })
     }
 
     async findAll(dto: FindGroupDto) {
-        const { skip, take, cursor } = dto;
+        const { skip, take, cursor } = dto
         return this.prisma.group.findMany({
             skip,
             take,
@@ -37,7 +37,7 @@ export class GroupService {
                     },
                 },
             },
-        });
+        })
     }
 
     async findOne(id: number) {
@@ -61,11 +61,11 @@ export class GroupService {
                     },
                 },
             },
-        });
+        })
     }
 
     async update(id: number, dto: UpdateGroupDto) {
-        const { name, categoryIds } = dto;
+        const { name, categoryIds } = dto
         return this.prisma.group.update({
             where: {
                 id,
@@ -94,7 +94,7 @@ export class GroupService {
                     },
                 },
             },
-        });
+        })
     }
 
     async remove(id: number) {
@@ -102,7 +102,7 @@ export class GroupService {
             where: {
                 id,
             },
-        });
+        })
     }
 
     async removeBatch(dto: DeleteGroupDto) {
@@ -112,6 +112,6 @@ export class GroupService {
                     in: dto.ids,
                 },
             },
-        });
+        })
     }
 }

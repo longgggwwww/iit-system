@@ -1,10 +1,10 @@
-import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CategoryModule } from './category/category.module';
-import { GroupModule } from './group/group.module';
+import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { CategoryModule } from './category/category.module'
+import { GroupModule } from './group/group.module'
 
 @Module({
     imports: [
@@ -20,7 +20,7 @@ import { GroupModule } from './group/group.module';
                         console.log(
                             config.get('COMPANY_RB_URL'),
                             config.get('COMPANY_QUEUE'),
-                        );
+                        )
                         return {
                             transport: Transport.RMQ,
                             options: {
@@ -30,7 +30,7 @@ import { GroupModule } from './group/group.module';
                                     durable: true,
                                 },
                             },
-                        };
+                        }
                     },
                     inject: [ConfigService],
                 },
@@ -46,6 +46,6 @@ export class AppModule implements OnApplicationBootstrap {
     constructor(@Inject('COMPANY_SERVICE') private company: ClientProxy) {}
 
     async onApplicationBootstrap() {
-        await this.company.connect();
+        await this.company.connect()
     }
 }

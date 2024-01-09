@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { CompanyService } from 'src/company/company.service';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { DeleteDepartmentDto } from './dto/delete-department.dto';
-import { FindDepartmentDto } from './dto/find-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { Inject, Injectable } from '@nestjs/common'
+import { ClientProxy } from '@nestjs/microservices'
+import { CompanyService } from 'src/company/company.service'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateDepartmentDto } from './dto/create-department.dto'
+import { DeleteDepartmentDto } from './dto/delete-department.dto'
+import { FindDepartmentDto } from './dto/find-department.dto'
+import { UpdateDepartmentDto } from './dto/update-department.dto'
 
 @Injectable()
 export class DepartmentService {
@@ -16,7 +16,7 @@ export class DepartmentService {
     ) {}
 
     async create(dto: CreateDepartmentDto) {
-        const { name, code, companyId, userId } = dto;
+        const { name, code, companyId, userId } = dto
         const department = await this.prisma.department.create({
             data: {
                 name,
@@ -35,12 +35,12 @@ export class DepartmentService {
                     },
                 },
             },
-        });
-        return department;
+        })
+        return department
     }
 
     async findAll(dto: FindDepartmentDto) {
-        const { skip, take, cursor } = dto;
+        const { skip, take, cursor } = dto
         const departments = await this.prisma.department.findMany({
             skip,
             take,
@@ -57,8 +57,8 @@ export class DepartmentService {
                     },
                 },
             },
-        });
-        return departments;
+        })
+        return departments
     }
 
     async findOne(id: number) {
@@ -75,16 +75,16 @@ export class DepartmentService {
                 },
                 positions: true,
             },
-        });
-        const company = await this.company.findOne(department.companyId);
+        })
+        const company = await this.company.findOne(department.companyId)
         return {
             ...department,
             company,
-        };
+        }
     }
 
     async update(id: number, dto: UpdateDepartmentDto) {
-        const { name, code, companyId, positionIds } = dto;
+        const { name, code, companyId, positionIds } = dto
         const department = await this.prisma.department.update({
             where: {
                 id,
@@ -115,8 +115,8 @@ export class DepartmentService {
                 },
                 positions: true,
             },
-        });
-        return department;
+        })
+        return department
     }
 
     async remove(id: number) {
@@ -133,12 +133,12 @@ export class DepartmentService {
                 },
                 positions: true,
             },
-        });
-        const company = await this.company.findOne(department.companyId);
+        })
+        const company = await this.company.findOne(department.companyId)
         return {
             ...department,
             company,
-        };
+        }
     }
 
     async removeBatch(dto: DeleteDepartmentDto) {
@@ -148,6 +148,6 @@ export class DepartmentService {
                     in: dto.ids,
                 },
             },
-        });
+        })
     }
 }

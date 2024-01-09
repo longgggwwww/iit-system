@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class UpsertDto {
     @IsNumber()
-    @IsNotEmpty()
+    @IsOptional()
     roleId?: number
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     thumbnail?: string
 }

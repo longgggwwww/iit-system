@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePositionDto } from './dto/create-position.dto';
-import { DeletePositionDto } from './dto/delete-position.dto';
-import { FindPositionDto } from './dto/find-position.dto';
-import { UpdatePositionDto } from './dto/update-position.dto';
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { CreatePositionDto } from './dto/create-position.dto'
+import { DeletePositionDto } from './dto/delete-position.dto'
+import { FindPositionDto } from './dto/find-position.dto'
+import { UpdatePositionDto } from './dto/update-position.dto'
 
 @Injectable()
 export class PositionService {
     constructor(private prisma: PrismaService) {}
 
     async create(dto: CreatePositionDto) {
-        const { name, code, departmentId, userId } = dto;
+        const { name, code, departmentId, userId } = dto
         return this.prisma.position.create({
             data: {
                 name,
@@ -30,11 +30,11 @@ export class PositionService {
                     },
                 },
             },
-        });
+        })
     }
 
     async findAll(dto: FindPositionDto) {
-        const { skip, take, cursor } = dto;
+        const { skip, take, cursor } = dto
         return this.prisma.position.findMany({
             skip,
             take,
@@ -50,7 +50,7 @@ export class PositionService {
                     },
                 },
             },
-        });
+        })
     }
 
     async findOne(id: number) {
@@ -65,11 +65,11 @@ export class PositionService {
                     },
                 },
             },
-        });
+        })
     }
 
     async update(id: number, dto: UpdatePositionDto) {
-        const { name, code, departmentId } = dto;
+        const { name, code, departmentId } = dto
         return this.prisma.position.update({
             where: {
                 id,
@@ -92,7 +92,7 @@ export class PositionService {
                     },
                 },
             },
-        });
+        })
     }
 
     async remove(id: number) {
@@ -107,7 +107,7 @@ export class PositionService {
                     },
                 },
             },
-        });
+        })
     }
 
     async removeBatch(dto: DeletePositionDto) {
@@ -117,6 +117,6 @@ export class PositionService {
                     in: dto.ids,
                 },
             },
-        });
+        })
     }
 }

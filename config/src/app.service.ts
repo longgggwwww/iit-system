@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
+import { firstValueFrom } from 'rxjs'
 import { UpsertDto } from './dto/upsert.dto'
 import { PrismaService } from './prisma/prisma.service'
 
@@ -7,15 +8,36 @@ import { PrismaService } from './prisma/prisma.service'
 export class AppService {
     constructor(
         private prisma: PrismaService,
-        @Inject('USER_SERVICE') private unit: ClientProxy,
+        @Inject('USER_SERVICE') private user: ClientProxy,
     ) {}
 
     ping() {
         return 'Gretting from CONFIG SERVICE'
     }
 
+    async find() {
+        const conf = await this.prisma.config.findFirst()
+        if (!conf) {
+            return this.prisma.config.upsert({
+                where: { id: 1 },
+                create: {},
+                update: {},
+            })
+        }
+
+        if (conf.roleId) {
+            const role = await firstValueFrom(
+                this.user.send('role_findOne', conf.roleId),
+            )
+            if (role) {
+                return { ...conf, role }
+            }
+        }
+        return conf
+    }
+
     async upsert(dto: UpsertDto) {
-        const config = await this.prisma.config.upsert({
+        const conf = await this.prisma.config.upsert({
             where: {
                 id: 1,
             },
@@ -23,13 +45,14 @@ export class AppService {
             update: dto,
         })
 
-        if (config.roleId) {
-            let role
-            return {
-                ...config,
-                role,
+        if (conf.roleId) {
+            const role = await firstValueFrom(
+                this.user.send('role_findOne', conf.roleId),
+            )
+            if (role) {
+                return { ...conf, role }
             }
         }
-        return config
+        return conf
     }
 }

@@ -9,13 +9,13 @@ import {
     Post,
     Query,
     Request,
-} from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CompanyService } from './company.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { DeleteCompanyDto } from './dto/delete-company.dto';
-import { FindCompanyDto } from './dto/find-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+} from '@nestjs/common'
+import { MessagePattern, Payload } from '@nestjs/microservices'
+import { CompanyService } from './company.service'
+import { CreateCompanyDto } from './dto/create-company.dto'
+import { DeleteCompanyDto } from './dto/delete-company.dto'
+import { FindCompanyDto } from './dto/find-company.dto'
+import { UpdateCompanyDto } from './dto/update-company.dto'
 
 @Controller('companies')
 export class CompanyController {
@@ -26,17 +26,17 @@ export class CompanyController {
         return this.company.create({
             ...dto,
             userId: req.user?.id,
-        });
+        })
     }
 
     @Get()
     findAll(@Query() dto: FindCompanyDto) {
-        return this.company.findAll(dto);
+        return this.company.findAll(dto)
     }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.company.findOne(id);
+        return this.company.findOne(id)
     }
 
     @Patch(':id')
@@ -44,17 +44,17 @@ export class CompanyController {
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: UpdateCompanyDto,
     ) {
-        return this.company.update(id, dto);
+        return this.company.update(id, dto)
     }
 
     @Delete('batch')
     removeMany(@Body() dto: DeleteCompanyDto) {
-        return this.company.removeBatch(dto);
+        return this.company.removeBatch(dto)
     }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
-        return this.company.remove(id);
+        return this.company.remove(id)
     }
 
     // ----------- Microservice ---------------
@@ -64,7 +64,7 @@ export class CompanyController {
         cmd: 'findAll',
     })
     _findAll(@Payload() dto: FindCompanyDto) {
-        return this.company.findAll(dto);
+        return this.company.findAll(dto)
     }
 
     @MessagePattern({
@@ -72,6 +72,6 @@ export class CompanyController {
         cmd: 'findOne',
     })
     _findOne(@Payload() id: number) {
-        return this.company.findOne(id);
+        return this.company.findOne(id)
     }
 }

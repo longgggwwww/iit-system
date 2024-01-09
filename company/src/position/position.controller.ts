@@ -9,12 +9,12 @@ import {
     Post,
     Query,
     Request,
-} from '@nestjs/common';
-import { CreatePositionDto } from './dto/create-position.dto';
-import { DeletePositionDto } from './dto/delete-position.dto';
-import { FindPositionDto } from './dto/find-position.dto';
-import { UpdatePositionDto } from './dto/update-position.dto';
-import { PositionService } from './position.service';
+} from '@nestjs/common'
+import { CreatePositionDto } from './dto/create-position.dto'
+import { DeletePositionDto } from './dto/delete-position.dto'
+import { FindPositionDto } from './dto/find-position.dto'
+import { UpdatePositionDto } from './dto/update-position.dto'
+import { PositionService } from './position.service'
 
 @Controller('positions')
 export class PositionController {
@@ -25,17 +25,17 @@ export class PositionController {
         return this.position.create({
             ...dto,
             userId: req.user?.id,
-        });
+        })
     }
 
     @Get()
     findAll(@Query() dto: FindPositionDto) {
-        return this.position.findAll(dto);
+        return this.position.findAll(dto)
     }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.position.findOne(id);
+        return this.position.findOne(id)
     }
 
     @Patch(':id')
@@ -43,16 +43,16 @@ export class PositionController {
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: UpdatePositionDto,
     ) {
-        return this.position.update(id, dto);
+        return this.position.update(id, dto)
     }
 
     @Delete('batch')
     removeMany(@Body() dto: DeletePositionDto) {
-        return this.position.removeBatch(dto);
+        return this.position.removeBatch(dto)
     }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
-        return this.position.remove(id);
+        return this.position.remove(id)
     }
 }

@@ -11,9 +11,13 @@ export class AppController {
         return this.app.ping()
     }
 
-    @Get('config')
-    find() {}
+    @Get('settings')
+    find() {
+        return this.app.find()
+    }
 
-    @Patch()
-    update(@Body() dto: UpsertDto) {}
+    @Patch('settings')
+    update(@Body() dto: UpsertDto) {
+        return this.app.upsert(dto)
+    }
 }

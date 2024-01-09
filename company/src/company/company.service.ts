@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { DeleteCompanyDto } from './dto/delete-company.dto';
-import { FindCompanyDto } from './dto/find-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Inject, Injectable } from '@nestjs/common'
+import { ClientProxy } from '@nestjs/microservices'
+import { firstValueFrom } from 'rxjs'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateCompanyDto } from './dto/create-company.dto'
+import { DeleteCompanyDto } from './dto/delete-company.dto'
+import { FindCompanyDto } from './dto/find-company.dto'
+import { UpdateCompanyDto } from './dto/update-company.dto'
 
 @Injectable()
 export class CompanyService {
@@ -15,7 +15,7 @@ export class CompanyService {
     ) {}
 
     async create(dto: CreateCompanyDto) {
-        const { name, email, phone, tax, wardId, userId } = dto;
+        const { name, email, phone, tax, wardId, userId } = dto
         const company = await this.prisma.company.create({
             data: {
                 name,
@@ -25,22 +25,19 @@ export class CompanyService {
                 wardId,
                 userId,
             },
-        });
+        })
 
         if (wardId) {
             const ward = await firstValueFrom(
-                this.unit.send({ prefix: 'ward', cmd: 'findOne' }, wardId),
-            );
-            return {
-                ...company,
-                ward,
-            };
+                this.unit.send('ward_findOne', wardId),
+            )
+            return { ...company, ward }
         }
-        return company;
+        return company
     }
 
     async findAll(dto: FindCompanyDto) {
-        const { skip, take, cursor } = dto;
+        const { skip, take, cursor } = dto
         return this.prisma.company.findMany({
             skip,
             take,
@@ -52,14 +49,12 @@ export class CompanyService {
             include: {
                 _count: true,
             },
-        });
+        })
     }
 
     async findOne(id: number) {
         const company = await this.prisma.company.findUniqueOrThrow({
-            where: {
-                id,
-            },
+            where: { id },
             include: {
                 _count: true,
                 departments: {
@@ -68,29 +63,21 @@ export class CompanyService {
                     },
                 },
             },
-        });
+        })
 
         if (company.wardId) {
             const ward = await firstValueFrom(
-                this.unit.send(
-                    { prefix: 'ward', cmd: 'findOne' },
-                    company.wardId,
-                ),
-            );
-            return {
-                ...company,
-                ward,
-            };
+                this.unit.send('ward_findOne', company.wardId),
+            )
+            return { ...company, ward }
         }
-        return company;
+        return company
     }
 
     async update(id: number, dto: UpdateCompanyDto) {
-        const { name, phone, email, tax, wardId, departmentIds } = dto;
+        const { name, phone, email, tax, wardId, departmentIds } = dto
         const company = await this.prisma.company.update({
-            where: {
-                id,
-            },
+            where: { id },
             data: {
                 name,
                 phone,
@@ -112,25 +99,20 @@ export class CompanyService {
                     },
                 },
             },
-        });
+        })
 
         if (wardId) {
             const ward = await firstValueFrom(
-                this.unit.send({ prefix: 'ward', cmd: 'findOne' }, wardId),
-            );
-            return {
-                ...company,
-                ward,
-            };
+                this.unit.send('ward_findOne', wardId),
+            )
+            return { ...company, ward }
         }
-        return company;
+        return company
     }
 
     async remove(id: number) {
         const company = await this.prisma.company.delete({
-            where: {
-                id,
-            },
+            where: { id },
             include: {
                 _count: true,
                 departments: {
@@ -139,30 +121,22 @@ export class CompanyService {
                     },
                 },
             },
-        });
+        })
 
         if (company.wardId) {
             const ward = await firstValueFrom(
-                this.unit.send(
-                    { prefix: 'ward', cmd: 'findOne' },
-                    company.wardId,
-                ),
-            );
-            return {
-                ...company,
-                ward,
-            };
+                this.unit.send('ward_findOne', company.wardId),
+            )
+            return { ...company, ward }
         }
-        return company;
+        return company
     }
 
     async removeBatch(dto: DeleteCompanyDto) {
         return this.prisma.company.deleteMany({
             where: {
-                id: {
-                    in: dto.ids,
-                },
+                id: { in: dto.ids },
             },
-        });
+        })
     }
 }

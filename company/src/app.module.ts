@@ -1,11 +1,11 @@
-import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CompanyModule } from './company/company.module';
-import { DepartmentModule } from './department/department.module';
-import { PositionModule } from './position/position.module';
+import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { CompanyModule } from './company/company.module'
+import { DepartmentModule } from './department/department.module'
+import { PositionModule } from './position/position.module'
 
 @Module({
     imports: [
@@ -25,7 +25,7 @@ import { PositionModule } from './position/position.module';
                                     durable: true,
                                 },
                             },
-                        };
+                        }
                     },
                     inject: [ConfigService],
                 },
@@ -42,6 +42,6 @@ export class AppModule implements OnApplicationBootstrap {
     constructor(@Inject('UNIT_SERVICE') private unit: ClientProxy) {}
 
     async onApplicationBootstrap() {
-        await this.unit.connect();
+        await this.unit.connect()
     }
 }

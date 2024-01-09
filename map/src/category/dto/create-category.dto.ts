@@ -1,21 +1,21 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class CreateCategoryDto {
     @IsString()
     @IsNotEmpty()
-    name: string;
+    name: string
 
     @IsString()
     @IsOptional()
-    icon?: string;
+    icon?: string
 
     @IsString()
     @IsOptional()
-    color?: string;
+    color?: string
 
     @IsNumber()
     @IsNotEmpty()
-    groupId: number;
+    groupId: number
 
-    userId?: number;
+    userId?: number
 }

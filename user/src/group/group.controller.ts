@@ -26,7 +26,9 @@ export class GroupController {
         private group: GroupService,
         @Inject(REQUEST) private req: any,
     ) {
-        req.headers.entity = 'permissionGroup'
+        if (req.headers) {
+            req.headers.entity = 'permissionGroup'
+        }
     }
 
     @Post()

@@ -1,17 +1,17 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateDepartmentDto {
     @IsString()
     @IsNotEmpty()
-    name: string;
+    name: string
 
     @IsString()
     @IsNotEmpty()
-    code: string;
+    code: string
 
     @IsNumber()
     @IsNotEmpty()
-    companyId: number;
+    companyId: number
 
-    userId?: number;
+    userId?: number
 }

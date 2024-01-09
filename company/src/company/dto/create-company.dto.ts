@@ -5,28 +5,28 @@ import {
     IsOptional,
     IsPhoneNumber,
     IsString,
-} from 'class-validator';
+} from 'class-validator'
 
 export class CreateCompanyDto {
     @IsString()
     @IsNotEmpty()
-    name: string;
+    name: string
 
     @IsEmail()
     @IsNotEmpty()
-    email: string;
+    email: string
 
     @IsPhoneNumber()
     @IsNotEmpty()
-    phone: string;
+    phone: string
 
     @IsString()
     @IsNotEmpty()
-    tax: string;
+    tax: string
 
     @IsNumber()
     @IsOptional()
-    wardId?: number;
+    wardId?: number
 
-    userId?: number;
+    userId?: number
 }
