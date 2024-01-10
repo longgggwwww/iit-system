@@ -1,11 +1,11 @@
-_format_version: "3.0"
+_format_version: '3.0'
 _transform: true
 
 services:
-  - name: s1
-    url: http://host.docker.internal:3000
-    routes:
-      - name: r1
-        paths:
-          - /
-        strip_path: true
+    - name: s1
+      url: http://host.docker.internal:3000
+      routes:
+          - name: r1
+            paths:
+                - /
+            strip_path: true

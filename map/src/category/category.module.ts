@@ -1,24 +1,10 @@
 import { Module } from '@nestjs/common'
+import { PrismaService } from 'src/prisma/prisma.service'
 import { CategoryController } from './category.controller'
 import { CategoryService } from './category.service'
 
 @Module({
-    imports: [
-        // ClientsModule.register([
-        //     {
-        //         name: 'COMPANY_SERVICE',
-        //         transport: Transport.RMQ,
-        //         options: {
-        //             urls: [`amqp://root:rmq@localhost:5672`],
-        //             queue: `company`,
-        //             queueOptions: {
-        //                 durable: true,
-        //             },
-        //         },
-        //     },
-        // ]),
-    ],
     controllers: [CategoryController],
-    providers: [CategoryService],
+    providers: [CategoryService, PrismaService],
 })
 export class CategoryModule {}

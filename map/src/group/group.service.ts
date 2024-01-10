@@ -42,22 +42,12 @@ export class GroupService {
 
     async findOne(id: number) {
         return this.prisma.group.findUniqueOrThrow({
-            where: {
-                id,
-            },
+            where: { id },
             include: {
+                _count: true,
                 categories: {
-                    select: {
-                        group: false,
-                        groupId: false,
-                    },
                     include: {
                         _count: true,
-                        places: {
-                            include: {
-                                _count: true,
-                            },
-                        },
                     },
                 },
             },
@@ -67,9 +57,7 @@ export class GroupService {
     async update(id: number, dto: UpdateGroupDto) {
         const { name, categoryIds } = dto
         return this.prisma.group.update({
-            where: {
-                id,
-            },
+            where: { id },
             data: {
                 name,
                 categories: categoryIds
@@ -79,18 +67,10 @@ export class GroupService {
                     : undefined,
             },
             include: {
+                _count: true,
                 categories: {
-                    select: {
-                        group: false,
-                        groupId: false,
-                    },
                     include: {
                         _count: true,
-                        places: {
-                            include: {
-                                _count: true,
-                            },
-                        },
                     },
                 },
             },
@@ -99,18 +79,14 @@ export class GroupService {
 
     async remove(id: number) {
         return this.prisma.group.delete({
-            where: {
-                id,
-            },
+            where: { id },
         })
     }
 
     async removeBatch(dto: DeleteGroupDto) {
         return this.prisma.group.deleteMany({
             where: {
-                id: {
-                    in: dto.ids,
-                },
+                id: { in: dto.ids },
             },
         })
     }

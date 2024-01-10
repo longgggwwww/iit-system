@@ -1,19 +1,77 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { ClientProxy } from '@nestjs/microservices'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { CreateCategoryDto } from './dto/create-category.dto'
+import { DeleteCategoryDto } from './dto/delete-category.dto'
+import { FindCategoryDto } from './dto/find-category.dto'
 import { UpdateCategoryDto } from './dto/update-category.dto'
 
 @Injectable()
 export class CategoryService {
-    constructor(
-        private prisma: PrismaService,
-        @Inject('COMPANY_SERVICE') private client: ClientProxy,
-    ) {}
+    constructor(private prisma: PrismaService) {}
 
-    create(dto: CreateCategoryDto) {
-        const { name, icon, color, groupId } = dto
+    async create(dto: CreateCategoryDto) {
+        const { name, icon, color, groupId, userId } = dto
         return this.prisma.category.create({
+            data: {
+                name,
+                icon,
+                color,
+                group: {
+                    connect: {
+                        id: groupId,
+                    },
+                },
+            },
+            include: {
+                group: {
+                    include: {
+                        _count: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findAll(dto: FindCategoryDto) {
+        const { skip, take, cursor } = dto
+        return this.prisma.category.findMany({
+            skip,
+            take,
+            cursor: cursor
+                ? {
+                      id: cursor,
+                  }
+                : undefined,
+            include: {
+                _count: true,
+                group: {
+                    include: {
+                        _count: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findOne(id: number) {
+        return this.prisma.category.findUniqueOrThrow({
+            where: { id },
+            include: {
+                _count: true,
+                group: {
+                    include: {
+                        _count: true,
+                    },
+                },
+                places: true,
+            },
+        })
+    }
+
+    async update(id: number, dto: UpdateCategoryDto) {
+        const { name, icon, color, groupId, placeIds } = dto
+        return this.prisma.category.update({
+            where: { id },
             data: {
                 name,
                 icon,
@@ -25,31 +83,36 @@ export class CategoryService {
                           },
                       }
                     : undefined,
+                places:
+                    placeIds && placeIds.length > 0
+                        ? {
+                              set: placeIds.map((id) => ({ id })),
+                          }
+                        : undefined,
             },
             include: {
-                group: true,
+                _count: true,
+                group: {
+                    include: {
+                        _count: true,
+                    },
+                },
+                places: true,
             },
         })
     }
 
-    findAll() {
-        console.log('call here')
-        return this.client.send('company_findAll', {
-            msg: 'hello world',
+    async remove(id: number) {
+        return this.prisma.category.delete({
+            where: { id },
         })
-
-        // return `This action returns all category`;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} category`
-    }
-
-    update(id: number, updateCategoryDto: UpdateCategoryDto) {
-        return `This action updates a #${id} category`
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} category`
+    async removeBatch(dto: DeleteCategoryDto) {
+        return this.prisma.category.deleteMany({
+            where: {
+                id: { in: dto.ids },
+            },
+        })
     }
 }

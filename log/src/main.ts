@@ -4,6 +4,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { PrismaClientExceptionFilter } from 'nestjs-prisma'
 import { AppModule } from './app.module'
+import { TrimPipe } from './pipes/trim.pipe'
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
@@ -19,6 +20,7 @@ async function bootstrap() {
                 enableImplicitConversion: true,
             },
         }),
+        new TrimPipe(),
     )
 
     const { httpAdapter } = app.get(HttpAdapterHost)

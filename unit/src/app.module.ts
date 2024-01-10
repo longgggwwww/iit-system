@@ -5,7 +5,7 @@ import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { DistrictModule } from './district/district.module'
-import { LoggingInterceptor } from './logging/logging.interceptor'
+import { LoggingInterceptor } from './interceptors/logging.interceptor'
 import { ProvinceModule } from './province/province.module'
 import { WardModule } from './ward/ward.module'
 

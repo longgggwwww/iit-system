@@ -9,6 +9,7 @@ import { PrismaService } from './prisma/prisma.service'
 import { ProvinceModule } from './province/province.module'
 import { RoleModule } from './role/role.module'
 import { WardModule } from './ward/ward.module'
+import { UserModule } from './user/user.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { WardModule } from './ward/ward.module'
         PermGroupModule,
         PermissionModule,
         RoleModule,
+        UserModule,
     ],
     controllers: [AppController],
     providers: [AppService, PrismaService],

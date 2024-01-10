@@ -6,7 +6,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { CompanyModule } from './company/company.module'
 import { DepartmentModule } from './department/department.module'
-import { LoggingInterceptor } from './logging/logging.interceptor'
+import { LoggingInterceptor } from './interceptors/logging.interceptor'
 import { PositionModule } from './position/position.module'
 
 @Module({
@@ -16,13 +16,13 @@ import { PositionModule } from './position/position.module'
             isGlobal: true,
             clients: [
                 {
-                    name: 'UNIT_SERVICE',
+                    name: 'LOG_SERVICE',
                     useFactory: (config: ConfigService) => {
                         return {
                             transport: Transport.RMQ,
                             options: {
-                                urls: [`${config.get('UNIT_RB_URL')}`],
-                                queue: `${config.get('UNIT_QUEUE')}`,
+                                urls: [`${config.get('LOG_RB_URL')}`],
+                                queue: `${config.get('LOG_QUEUE')}`,
                                 queueOptions: {
                                     durable: true,
                                 },
@@ -32,13 +32,13 @@ import { PositionModule } from './position/position.module'
                     inject: [ConfigService],
                 },
                 {
-                    name: 'LOG_SERVICE',
+                    name: 'UNIT_SERVICE',
                     useFactory: (config: ConfigService) => {
                         return {
                             transport: Transport.RMQ,
                             options: {
-                                urls: [`${config.get('LOG_RB_URL')}`],
-                                queue: `${config.get('LOG_QUEUE')}`,
+                                urls: [`${config.get('UNIT_RB_URL')}`],
+                                queue: `${config.get('UNIT_QUEUE')}`,
                                 queueOptions: {
                                     durable: true,
                                 },
@@ -64,11 +64,11 @@ import { PositionModule } from './position/position.module'
 })
 export class AppModule implements OnApplicationBootstrap {
     constructor(
-        @Inject('UNIT_SERVICE') private unit: ClientProxy,
         @Inject('LOG_SERVICE') private log: ClientProxy,
+        @Inject('UNIT_SERVICE') private unit: ClientProxy,
     ) {}
 
     async onApplicationBootstrap() {
-        await Promise.allSettled([this.unit.connect(), this.log.connect()])
+        await Promise.allSettled([this.log.connect(), this.unit.connect()])
     }
 }

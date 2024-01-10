@@ -5,7 +5,7 @@ import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { GroupModule } from './group/group.module'
-import { LoggingInterceptor } from './logging/logging.interceptor'
+import { LoggingInterceptor } from './interceptors/logging.interceptor'
 import { PermissionModule } from './permission/permission.module'
 import { RoleModule } from './role/role.module'
 import { UserModule } from './user/user.module'
@@ -32,6 +32,22 @@ import { UserModule } from './user/user.module'
                     },
                     inject: [ConfigService],
                 },
+                {
+                    name: 'CFG_SERVICE',
+                    useFactory: (config: ConfigService) => {
+                        return {
+                            transport: Transport.RMQ,
+                            options: {
+                                urls: [`${config.get('CFG_RB_URL')}`],
+                                queue: `${config.get('CFG_QUEUE')}`,
+                                queueOptions: {
+                                    durable: true,
+                                },
+                            },
+                        }
+                    },
+                    inject: [ConfigService],
+                },
             ],
         }),
         GroupModule,
@@ -49,9 +65,12 @@ import { UserModule } from './user/user.module'
     ],
 })
 export class AppModule implements OnApplicationBootstrap {
-    constructor(@Inject('LOG_SERVICE') private log: ClientProxy) {}
+    constructor(
+        @Inject('LOG_SERVICE') private log: ClientProxy,
+        @Inject('CFG_SERVICE') private cfg: ClientProxy,
+    ) {}
 
     async onApplicationBootstrap() {
-        await this.log.connect()
+        await Promise.allSettled([this.log.connect(), this.cfg.connect()])
     }
 }
