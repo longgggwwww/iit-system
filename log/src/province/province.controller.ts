@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Query } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Query,
+} from '@nestjs/common'
 import { DeleteProvinceDto } from './dto/delete-province.dto'
 import { FindProvinceDto } from './dto/find-province.dto'
 import { ProvinceService } from './province.service'
@@ -13,8 +21,8 @@ export class ProvinceController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.province.findOne(+id)
+    findOne(@Param('id', ParseIntPipe) id: number) {
+        return this.province.findOne(id)
     }
 
     @Delete('batch')
@@ -23,7 +31,7 @@ export class ProvinceController {
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.province.remove(+id)
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.province.remove(id)
     }
 }

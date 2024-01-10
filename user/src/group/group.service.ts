@@ -82,15 +82,6 @@ export class GroupService {
     async remove(id: number) {
         return this.prisma.group.delete({
             where: { id },
-            include: {
-                _count: true,
-                permissions: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                user: true,
-            },
         })
     }
 

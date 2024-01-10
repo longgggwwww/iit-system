@@ -7,11 +7,11 @@ import {
     ParseIntPipe,
     Query,
 } from '@nestjs/common'
-import { DeleteWardDto } from 'src/ward/dto/delete-ward.dto'
 import { DistrictService } from './district.service'
+import { DeleteDistrictDto } from './dto/delete-district.dto'
 import { FindDistrictDto } from './dto/find-district.dto'
 
-@Controller('district')
+@Controller('districts')
 export class DistrictController {
     constructor(private district: DistrictService) {}
 
@@ -26,7 +26,7 @@ export class DistrictController {
     }
 
     @Delete('batch')
-    removeMany(@Body() dto: DeleteWardDto) {
+    removeMany(@Body() dto: DeleteDistrictDto) {
         return this.district.removeBatch(dto)
     }
 

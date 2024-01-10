@@ -138,24 +138,6 @@ export class PermissionService {
     async remove(id: number) {
         return this.prisma.permission.delete({
             where: { id },
-            include: {
-                _count: true,
-                group: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                roles: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                user: {
-                    include: {
-                        _count: true,
-                    },
-                },
-            },
         })
     }
 

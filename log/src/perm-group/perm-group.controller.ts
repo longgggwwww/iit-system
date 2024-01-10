@@ -22,7 +22,7 @@ export class PermGroupController {
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.permGroup.findOne(+id)
+        return this.permGroup.findOne(id)
     }
 
     @Delete('batch')

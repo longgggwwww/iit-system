@@ -175,30 +175,6 @@ export class RoleService {
     async remove(id: number) {
         return this.prisma.role.delete({
             where: { id },
-            include: {
-                _count: true,
-                successor: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                predecessor: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                permissions: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                users: true,
-                user: {
-                    include: {
-                        _count: true,
-                    },
-                },
-            },
         })
     }
 
