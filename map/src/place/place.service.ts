@@ -79,11 +79,6 @@ export class PlaceService {
             },
             include: {
                 _count: true,
-                group: {
-                    include: {
-                        _count: true,
-                    },
-                },
             },
         })
     }
@@ -93,12 +88,6 @@ export class PlaceService {
             where: { id },
             include: {
                 _count: true,
-                group: {
-                    include: {
-                        _count: true,
-                    },
-                },
-                places: true,
             },
         })
     }
