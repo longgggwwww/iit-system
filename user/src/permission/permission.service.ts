@@ -44,7 +44,7 @@ export class PermissionService {
     }
 
     async findAll(dto: FindPermissionDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.permission.findMany({
             skip,
             take,
@@ -53,6 +53,9 @@ export class PermissionService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 _count: true,
                 group: {

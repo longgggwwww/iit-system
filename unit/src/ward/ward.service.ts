@@ -34,7 +34,7 @@ export class WardService {
     }
 
     async findAll(dto: FindWardDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.ward.findMany({
             skip,
             take,
@@ -43,6 +43,9 @@ export class WardService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 district: {
                     include: {

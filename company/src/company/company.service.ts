@@ -36,7 +36,7 @@ export class CompanyService {
     }
 
     async findAll(dto: FindCompanyDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.company.findMany({
             skip,
             take,
@@ -45,6 +45,9 @@ export class CompanyService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 _count: true,
             },

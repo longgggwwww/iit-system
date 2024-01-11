@@ -46,7 +46,7 @@ export class UserService {
     }
 
     async findAll(dto: FindUserDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.user.findMany({
             skip,
             take,
@@ -55,6 +55,9 @@ export class UserService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 role: {
                     include: {

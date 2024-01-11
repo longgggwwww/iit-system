@@ -21,7 +21,7 @@ export class ProvinceService {
     }
 
     async findAll(dto: FindProvinceDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.province.findMany({
             skip,
             take,
@@ -30,6 +30,9 @@ export class ProvinceService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 _count: true,
             },

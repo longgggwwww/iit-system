@@ -1,4 +1,5 @@
-import { IsNumber, IsOptional } from 'class-validator'
+import { Prisma } from '@prisma/client'
+import { IsEnum, IsNumber, IsOptional } from 'class-validator'
 
 export class FindPositionDto {
     @IsNumber()
@@ -12,4 +13,8 @@ export class FindPositionDto {
     @IsNumber()
     @IsOptional()
     cursor?: number
+
+    @IsEnum(Prisma.SortOrder)
+    @IsOptional()
+    sort?: Prisma.SortOrder
 }

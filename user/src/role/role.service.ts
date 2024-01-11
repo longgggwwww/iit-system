@@ -58,7 +58,7 @@ export class RoleService {
     }
 
     async findAll(dto: FindRoleDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.role.findMany({
             skip,
             take,
@@ -67,6 +67,9 @@ export class RoleService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 _count: true,
                 successor: {

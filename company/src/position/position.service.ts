@@ -34,7 +34,7 @@ export class PositionService {
     }
 
     async findAll(dto: FindPositionDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.position.findMany({
             skip,
             take,
@@ -43,6 +43,9 @@ export class PositionService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 department: {
                     include: {

@@ -33,7 +33,7 @@ export class DepartmentService {
     }
 
     async findAll(dto: FindDepartmentDto) {
-        const { skip, take, cursor } = dto
+        const { skip, take, cursor, sort } = dto
         return this.prisma.department.findMany({
             skip,
             take,
@@ -42,6 +42,9 @@ export class DepartmentService {
                       id: cursor,
                   }
                 : undefined,
+            orderBy: {
+                id: sort,
+            },
             include: {
                 _count: true,
                 company: {
