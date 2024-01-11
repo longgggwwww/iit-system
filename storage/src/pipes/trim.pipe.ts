@@ -28,14 +28,12 @@ export class TrimPipe implements PipeTransform {
 
     transform(values: any, metadata: ArgumentMetadata) {
         const { type } = metadata
-
         if (type === 'body') {
             if (this.isObj(values)) {
                 return this.trim(values)
             }
             throw new BadRequestException('Validation failed')
         }
-
         return values
     }
 }

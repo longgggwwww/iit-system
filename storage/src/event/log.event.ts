@@ -1,4 +1,4 @@
-export type Dto = {
+export type LogEventDto = {
     entity: string
     userId: number
     ip?: string
@@ -31,7 +31,7 @@ export class LogEvent {
         body,
         time,
         error,
-    }: Dto) {
+    }: LogEventDto) {
         this.entity = entity
         this.userId = userId
         this.ip = ip

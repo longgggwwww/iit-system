@@ -1,14 +1,14 @@
-export type Dto = {
+export type UploadAvtEventDto = {
     userId: number
     imageUrl: string
 }
 
-export class UploadAvatarEvent {
-    private readonly userId: number
-    private readonly imageUrl: string
+export class UploadAvtEvent {
+    private readonly id: number
+    private readonly url: string
 
-    constructor({ userId, imageUrl }: Dto) {
-        this.userId = userId
-        this.imageUrl = imageUrl
+    constructor({ userId, imageUrl }: UploadAvtEventDto) {
+        this.id = userId
+        this.url = imageUrl
     }
 }

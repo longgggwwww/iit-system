@@ -34,7 +34,6 @@ export class TrimPipe implements PipeTransform {
             }
             throw new BadRequestException('Validation failed')
         }
-
         return values
     }
 }

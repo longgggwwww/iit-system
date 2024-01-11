@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
-import { UploadAvatarEvent } from 'src/event/upload-avatar.event'
+import { UploadAvtEvent } from 'src/event/upload-avatar.event'
 
 @Injectable()
 export class UserService {
@@ -15,7 +15,7 @@ export class UserService {
             file,
             `users/${userId}`,
         )
-        const image = this.cloudinary.make(uploadedImage.public_id, {
+        const avt = this.cloudinary.make(uploadedImage.public_id, {
             transformation: [
                 {
                     gravity: 'face',
@@ -27,13 +27,13 @@ export class UserService {
         })
         if (userId) {
             this.user.emit(
-                'user_updateAvt',
-                new UploadAvatarEvent({
+                'user_avt',
+                new UploadAvtEvent({
                     userId,
-                    imageUrl: image,
+                    imageUrl: avt,
                 }),
             )
         }
-        return image
+        return avt
     }
 }

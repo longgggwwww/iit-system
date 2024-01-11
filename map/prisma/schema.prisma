@@ -59,6 +59,7 @@ model Review {
   content   String
   stars     Int
   photos    String[]
+  status    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

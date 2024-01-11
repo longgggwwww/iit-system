@@ -12,9 +12,7 @@ import { UserModule } from './user/user.module'
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
-        MulterModule.register({
-            dest: 'uploads',
-        }),
+        MulterModule,
         ClientsModule.registerAsync({
             isGlobal: true,
             clients: [

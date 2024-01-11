@@ -5,7 +5,7 @@ import {
     v2 as cloudinary,
 } from 'cloudinary'
 import * as streamifier from 'streamifier'
-import { CloudinaryResponse } from './cloudinary-response'
+import { CloudinaryResponse } from './response'
 
 @Injectable()
 export class CloudinaryService {

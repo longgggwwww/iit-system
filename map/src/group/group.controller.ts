@@ -20,7 +20,7 @@ import { UpdateGroupDto } from './dto/update-group.dto'
 import { GroupService } from './group.service'
 
 @Injectable({ scope: Scope.REQUEST })
-@Controller('group')
+@Controller('groups')
 export class GroupController {
     constructor(
         private group: GroupService,
