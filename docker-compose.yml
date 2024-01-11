@@ -45,7 +45,7 @@ services:
             - ADMINER_DESIGN=pokorny
         depends_on:
             - user-postgres
-            - map-postgres
+            - map-postgis
             - company-postgres
             - unit-postgres
             - log-postgres
@@ -59,12 +59,13 @@ services:
         environment:
             - POSTGRES_USER=${USER_POSTGRES_USER:-root}
             - POSTGRES_PASSWORD=${USER_POSTGRES_PASSWORD:-123456}
+            - POSTGRES_DB=map
         volumes:
             - user-postgres:/var/lib/postgresql/data
 
-    map-postgres:
-        image: postgres:14
-        container_name: map-postgres
+    map-postgis:
+        image: postgis/postgis:13-3.1-alpine
+        container_name: map-postgis
         restart: always
         ports:
             - 5433:5432
@@ -72,7 +73,7 @@ services:
             - POSTGRES_USER=${MAP_POSTGRES_USER:-root}
             - POSTGRES_PASSWORD=${MAP_POSTGRES_PASSWORD:-123456}
         volumes:
-            - map-postgres:/var/lib/postgresql/data
+            - map-postgis:/var/lib/postgresql/data
 
     company-postgres:
         image: postgres:14
@@ -127,8 +128,8 @@ volumes:
         name: rabbitmq
     user-postgres:
         name: user-postgres-db
-    map-postgres:
-        name: map-postgres-db
+    map-postgis:
+        name: map-postgis-db
     company-postgres:
         name: company-postgres-db
     unit-postgres:

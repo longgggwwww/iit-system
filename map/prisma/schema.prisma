@@ -2,12 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
 }
 
 model Group {
@@ -37,6 +39,8 @@ model Place {
   name        String
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  Int
+  lat         Float
+  lng         Float
   description String?
   wardId      Int?
   photos      String[]
@@ -49,6 +53,12 @@ model Place {
   reviews     Review[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Point {
+  id       Int                                   @id @default(autoincrement())
+  name     String                                @unique
+  location Unsupported("geography(Point, 4326)")
 }
 
 model Review {

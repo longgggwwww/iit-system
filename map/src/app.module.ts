@@ -7,6 +7,7 @@ import { AppService } from './app.service'
 import { CategoryModule } from './category/category.module'
 import { GroupModule } from './group/group.module'
 import { LoggingInterceptor } from './interceptors/logging.interceptor'
+import { PlaceModule } from './place/place.module';
 
 @Module({
     imports: [
@@ -52,6 +53,7 @@ import { LoggingInterceptor } from './interceptors/logging.interceptor'
         }),
         CategoryModule,
         GroupModule,
+        PlaceModule,
     ],
     controllers: [AppController],
     providers: [
